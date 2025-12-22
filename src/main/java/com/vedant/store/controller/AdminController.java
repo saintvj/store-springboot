@@ -1,9 +1,12 @@
 package com.vedant.store.controller;
+import com.vedant.store.dto.ProductRequest;
 import com.vedant.store.model.Product;
 import com.vedant.store.repository.ProductRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.ui.Model;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
@@ -17,16 +20,27 @@ public class AdminController {
 
 
     @GetMapping("/admin")
-    public String getAdmin(){
+    public String adminPage(Model model) {
+        model.addAttribute("productRequest", new ProductRequest());
         return "admin";
     }
 
+
+
     @PostMapping("/admin/add")
     public String addProduct(
-            @RequestParam String name,
-            @RequestParam int price
+            @jakarta.validation.Valid ProductRequest productRequest,
+            org.springframework.validation.BindingResult bindingResult,
+            org.springframework.ui.Model model
     ){
-        Product product = new Product(name,price);
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("productRequest", productRequest);
+            return "admin";
+        }
+
+
+        Product product = new Product(productRequest.getName(),productRequest.getPrice());
         productRepository.save(product);
 
         return "redirect:/";
