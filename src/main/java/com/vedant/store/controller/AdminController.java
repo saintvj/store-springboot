@@ -40,7 +40,11 @@ public class AdminController {
         }
 
 
-        Product product = new Product(productRequest.getName(),productRequest.getPrice());
+        Product product = Product.builder()
+                .name(productRequest.getName())
+                                    .price(productRequest.getPrice())
+                                            .build();
+
         productRepository.save(product);
 
         return "redirect:/";
