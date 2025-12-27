@@ -12,6 +12,8 @@ public class Product {
     private String name;
     private int price;
 
+
+
     protected Product() {
         // Required by JPA
     }
@@ -51,6 +53,9 @@ public class Product {
         }
     }
 
+    public void setId(long id){
+        this.id=id;
+    }
     // getters only (immutable-style)
     public Long getId() {
         return id;

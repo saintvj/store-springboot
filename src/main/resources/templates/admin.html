@@ -19,6 +19,10 @@
     <div style="color:red" th:if="${#fields.hasErrors('price')}"
          th:errors="*{price}"></div>
 
+
+    <input type="hidden" name="id" th:value="${productId}" />
+
+
     <br><br>
 
     <button type="submit">Add Product</button>
