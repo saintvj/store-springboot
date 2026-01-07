@@ -1,5 +1,6 @@
 package com.vedant.store.controller;
 
+import com.vedant.store.config.AdminConfig;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,9 +11,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class AuthController {
 
-    // TEMP credentials (MVP)
-    private static final String ADMIN_USERNAME = "admin";
-    private static final String ADMIN_PASSWORD = "admin123";
+    private final AdminConfig adminConfig;
+
+    public AuthController(AdminConfig adminConfig) {
+        this.adminConfig = adminConfig;
+    }
 
     @GetMapping("/login")
     public String loginPage(
@@ -29,20 +32,18 @@ public class AuthController {
     public String handleLogin(
             @RequestParam String username,
             @RequestParam String password,
-            HttpSession session
+            HttpSession session,
+            Model model
     ) {
-
-        if (ADMIN_USERNAME.equals(username)
-                && ADMIN_PASSWORD.equals(password)) {
-
-            // ✅ Create session
-            session.setAttribute("LOGGED_IN_ADMIN", true);
-
-            return "redirect:/admin";
+        if (!adminConfig.authenticate(username, password)) {
+            model.addAttribute("error", "Invalid credentials");
+            return "login";
         }
 
-        // ❌ Login failed
-        return "redirect:/login?error=true";
+        // ✅ Create session
+        session.setAttribute("LOGGED_IN_ADMIN", true);
+
+        return "redirect:/admin";
     }
 
     @GetMapping("/logout")
