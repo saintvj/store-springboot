@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:text="${product.name}">Product</title>
+</head>
+<body>
+
+<h1 th:text="${product.name}">Product Name</h1>
+<p>Price: ₹<span th:text="${product.price}">0</span></p>
+
+<form th:action="@{/order/{id}(id=${product.id})}" method="get">
+
+    <label>Quantity:</label>
+    <input type="number" name="qty" min="1" value="1"/>
+
+    <br><br>
+
+    <button type="submit">Order on WhatsApp</button>
+
+</form>
+
+<br>
+<a href="/">← Back to store</a>
+
+</body>
+</html>

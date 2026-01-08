@@ -1,29 +1,25 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>My Store</title>
+    <title>CSG Store</title>
 </head>
 <body>
 
-<h1>Products</h1>
+<h1> CSG Store</h1>
+<p>Fresh snacks from our local store</p>
 
-<ul>
-    <li th:each="product : ${products}">
-        <span th:text="${product.name}"></span>
-        -
+<hr>
 
-        ₹<span th:text="${product.price}"></span>
-        <a th:href="@{/admin/edit/{id}(id=${product.id})}">Edit</a>
+<div th:each="product : ${products}">
+    <h3 th:text="${product.name}">Product Name</h3>
+    <p>₹<span th:text="${product.price}">0</span></p>
 
-        <a th:href="@{/admin/delete/{id}(id=${product.id})}"
-           onclick="return confirm('Are you sure you want to delete this product?')">
-            Delete
-        </a>
+    <a th:href="@{/product/{id}(id=${product.id})}">
+        View / Order
+    </a>
 
-
-
-    </li>
-</ul>
+    <hr>
+</div>
 
 </body>
 </html>
