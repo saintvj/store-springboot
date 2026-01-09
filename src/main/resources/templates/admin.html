@@ -1,31 +1,79 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin - Add products</title>
+    <title>Admin Panel | CSG Store</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/theme.js" defer></script>
+
+    <style>
+        .theme-btn {
+          background: transparent;
+          border: 1px solid var(--glass-border);
+          border-radius: 10px;
+          padding: 6px 10px;
+          cursor: pointer;
+          font-size: 1rem;
+        }
+
+        .admin-wrapper { padding: 20px; }
+        .admin-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 20px;
+          padding: 16px;
+        }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; }
+        tr:not(:last-child) { border-bottom: 1px solid rgba(0,0,0,0.1); }
+    </style>
 </head>
+
 <body>
 
-<form action="/admin/add" method="post" th:object="${productRequest}">
+<div class="admin-wrapper">
 
-    <label>Product Name:</label>
-    <input type="text" th:field="*{name}" />
-    <div style="color:red" th:if="${#fields.hasErrors('name')}"
-         th:errors="*{name}"></div>
+    <div class="admin-header glass">
+        <h2>Admin Panel</h2>
+        <div>
+            <button onclick="toggleTheme()" class="theme-btn">🌙</button>
+            <a href="/admin/add" class="btn">+ Add Product</a>
+        </div>
+    </div>
 
-    <br><br>
+    <div class="glass" style="padding:20px;">
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Price (₹)</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td th:text="${product.id}">1</td>
+                <td th:text="${product.name}">Sample</td>
+                <td th:text="${product.price}">100</td>
+                <td>
+                    <a th:href="@{/admin/edit/{id}(id=${product.id})}">Edit</a> |
+                    <a th:href="@{/admin/delete/{id}(id=${product.id})}">Delete</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
-    <label>Price:</label>
-    <input type="number" th:field="*{price}" />
-    <div style="color:red" th:if="${#fields.hasErrors('price')}"
-         th:errors="*{price}"></div>
+    <div style="margin-top:20px;text-align:right;">
+        <a href="/logout">Logout</a>
+    </div>
 
-
-    <input type="hidden" name="id" th:value="${productId}" />
-
-
-    <br><br>
-
-    <button type="submit">Add Product</button>
-</form>
+</div>
 
 </body>
+</html>

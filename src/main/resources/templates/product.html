@@ -2,25 +2,63 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${product.name}">Product</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<h1 th:text="${product.name}">Product Name</h1>
-<p>Price: ₹<span th:text="${product.price}">0</span></p>
+<div class="detail-wrapper">
+    <div class="detail-card glass">
 
-<form th:action="@{/order/{id}(id=${product.id})}" method="get">
+        <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24"
+             alt="Product image">
 
-    <label>Quantity:</label>
-    <input type="number" name="qty" min="1" value="1"/>
+        <h2 th:text="${product.name}">Product Name</h2>
+        <p><strong>₹ <span th:text="${product.price}">0</span></strong></p>
 
-    <br><br>
+        <!-- Quantity Dropdown -->
+        <label for="qty"><strong>Select Quantity</strong></label>
+        <select class="qty" id="qty">
+            <option value="100g">100 g</option>
+            <option value="200g">200 g</option>
+            <option value="250g">250 g</option>
+            <option value="500g">500 g</option>
+            <option value="1kg" selected>1 kg</option>
+            <option value="2kg">2 kg</option>
+            <option value="3kg">3 kg</option>
+            <option value="4kg">4 kg</option>
+        </select>
 
-    <button type="submit">Order on WhatsApp</button>
+        <!-- Order Button -->
+        <a id="orderBtn"
+           class="btn"
+           th:href="@{/order/{id}(id=${product.id}, qty=1kg)}">
+            Order on WhatsApp
+        </a>
 
-</form>
 
-<br>
-<a href="/">← Back to store</a>
+        <a href="/" class="back-link">← Back to Store</a>
+    </div>
+</div>
+
+<footer class="glass">
+    <p><strong>CSG Store</strong></p>
+    <p>Near Main Market, Your City, India</p>
+    <p>Phone / WhatsApp: +91 98765 43210</p>
+    <p>Orders via WhatsApp only</p>
+</footer>
+
+<!-- Minimal JS -->
+<script>
+    const qtySelect = document.getElementById("qty");
+    const orderBtn = document.getElementById("orderBtn");
+
+    qtySelect.addEventListener("change", () => {
+      const qty = qtySelect.value;
+      const baseUrl = orderBtn.getAttribute("href").split("?")[0];
+      orderBtn.setAttribute("href", baseUrl + "?qty=" + qty);
+    });
+</script>
 
 </body>
 </html>

@@ -2,24 +2,51 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>CSG Store</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- IMPORTANT: CSS must load -->
+    <link rel="stylesheet" href="/css/style.css">
 </head>
+
 <body>
 
-<h1> CSG Store</h1>
-<p>Fresh snacks from our local store</p>
-
-<hr>
-
-<div th:each="product : ${products}">
-    <h3 th:text="${product.name}">Product Name</h3>
-    <p>₹<span th:text="${product.price}">0</span></p>
-
-    <a th:href="@{/product/{id}(id=${product.id})}">
-        View / Order
-    </a>
-
-    <hr>
+<!-- NAVBAR -->
+<div class="navbar glass">
+    <div>
+        <h1>CSG Store</h1>
+        <p>Fresh snacks from our local store</p>
+    </div>
+    <a href="/login">Admin Login</a>
 </div>
+
+<!-- PRODUCT GRID -->
+<div class="container">
+    <div class="grid">
+
+        <div class="product-card glass" th:each="product : ${products}">
+            <img
+                    src="https://images.unsplash.com/photo-1604909052743-94e838986d24"
+                    alt="Snack image"/>
+
+            <h3 th:text="${product.name}">Product Name</h3>
+            <span>₹ <span th:text="${product.price}">0</span></span>
+
+            <a th:href="@{/product/{id}(id=${product.id})}">
+                View / Order
+            </a>
+        </div>
+
+    </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="glass">
+    <p><strong>CSG Store</strong></p>
+    <p>Near Main Market, Your City, India</p>
+    <p>Phone / WhatsApp: +91 98765 43210</p>
+    <p>Orders via WhatsApp only</p>
+</footer>
 
 </body>
 </html>
