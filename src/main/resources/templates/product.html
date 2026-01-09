@@ -14,28 +14,27 @@
              alt="Product image">
 
         <h2 th:text="${product.name}">Product Name</h2>
-        <p><strong>₹ <span th:text="${product.price}">0</span></strong></p>
+        <p><strong>₹ <span th:text="${product.price}">0</span> / 100g</strong></p>
 
         <!-- Quantity Dropdown -->
         <label for="qty"><strong>Select Quantity</strong></label>
         <select class="qty" id="qty">
-            <option value="100g">100 g</option>
-            <option value="200g">200 g</option>
-            <option value="250g">250 g</option>
-            <option value="500g">500 g</option>
-            <option value="1kg" selected>1 kg</option>
-            <option value="2kg">2 kg</option>
-            <option value="3kg">3 kg</option>
-            <option value="4kg">4 kg</option>
+            <option value="100">100 g</option>
+            <option value="200">200 g</option>
+            <option value="250">250 g</option>
+            <option value="500">500 g</option>
+            <option value="1000" selected>1 kg</option>
+            <option value="2000">2 kg</option>
+            <option value="3000">3 kg</option>
+            <option value="4000">4 kg</option>
         </select>
 
         <!-- Order Button -->
         <a id="orderBtn"
            class="btn"
-           th:href="@{/order/{id}(id=${product.id}, qty=1kg)}">
+           th:href="@{/order/{id}(id=${product.id}, qty=1000)}">
             Order on WhatsApp
         </a>
-
 
         <a href="/" class="back-link">← Back to Store</a>
     </div>
@@ -54,9 +53,9 @@
     const orderBtn = document.getElementById("orderBtn");
 
     qtySelect.addEventListener("change", () => {
-      const qty = qtySelect.value;
-      const baseUrl = orderBtn.getAttribute("href").split("?")[0];
-      orderBtn.setAttribute("href", baseUrl + "?qty=" + qty);
+        const qty = qtySelect.value;
+        const baseUrl = orderBtn.getAttribute("href").split("?")[0];
+        orderBtn.setAttribute("href", baseUrl + "?qty=" + qty);
     });
 </script>
 

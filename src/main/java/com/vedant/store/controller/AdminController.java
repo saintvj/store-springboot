@@ -19,6 +19,7 @@ public class AdminController {
     @GetMapping("/admin")
     public String adminPage(Model model) {
         model.addAttribute("productRequest", new ProductRequest());
+        model.addAttribute("products", productRepository.findAll());
         return "admin";
     }
 
@@ -34,6 +35,8 @@ public class AdminController {
 
         model.addAttribute("productRequest", productRequest);
         model.addAttribute("productId", id);
+        model.addAttribute("products", productRepository.findAll()); // ✅ ADD
+
 
         return "admin";
     }

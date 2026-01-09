@@ -33,7 +33,6 @@ public class HomeController {
         return "product";
     }
 
-
     @GetMapping("/order/{id}")
     public String orderOnWhatsApp(
             @PathVariable Long id,
@@ -43,17 +42,27 @@ public class HomeController {
         var product = productRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid product ID"));
 
+        int totalPrice = (product.getPrice() * qty) / 1000;
+
+        String quantityLabel =
+                qty >= 1000 ? (qty / 1000) + " kg" : qty + " g";
+
         String message = String.format(
-                "Hi, I want to order:%nProduct: %s%nQuantity: %d%nPrice: ₹%d",
+                "Hi, I want to order:%n" +
+                        "Product: %s%n" +
+                        "Quantity: %s%n" +
+                        "Total Price: ₹%d",
                 product.getName(),
-                qty,
-                product.getPrice() * qty
+                quantityLabel,
+                totalPrice
         );
 
-        String whatsappUrl = "https://wa.me/8446861047?text=" +
-                java.net.URLEncoder.encode(message, java.nio.charset.StandardCharsets.UTF_8);
+        String encodedMessage = java.net.URLEncoder.encode(
+                message,
+                java.nio.charset.StandardCharsets.UTF_8
+        );
 
-        return "redirect:" + whatsappUrl;
+        return "redirect:https://wa.me/8446861047?text=" + encodedMessage;
     }
 
 
