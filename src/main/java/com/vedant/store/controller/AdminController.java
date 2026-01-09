@@ -1,14 +1,11 @@
 package com.vedant.store.controller;
+
 import com.vedant.store.dto.ProductRequest;
 import com.vedant.store.model.Product;
 import com.vedant.store.repository.ProductRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.ui.Model;
-
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class AdminController {
@@ -19,7 +16,6 @@ public class AdminController {
         this.productRepository = productRepository;
     }
 
-
     @GetMapping("/admin")
     public String adminPage(Model model) {
         model.addAttribute("productRequest", new ProductRequest());
@@ -29,29 +25,24 @@ public class AdminController {
     @GetMapping("/admin/edit/{id}")
     public String editProduct(@PathVariable long id, Model model) {
 
-        Product product = productRepository.findById(id).
-                orElseThrow(()-> new IllegalArgumentException("Invalid product id"));
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product id"));
 
         ProductRequest productRequest = new ProductRequest();
-
         productRequest.setName(product.getName());
-        productRequest.setPrice(product.getPrice());;
+        productRequest.setPrice(product.getPrice());
 
-        model.addAttribute("productRequest", productRequest); // ✅ REQUIRED
-        model.addAttribute("productId", id);                   // ✅ REQUIRED
-
-
+        model.addAttribute("productRequest", productRequest);
+        model.addAttribute("productId", id);
 
         return "admin";
     }
 
     @GetMapping("/admin/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
-
         productRepository.deleteById(id);
         return "redirect:/";
     }
-
 
     @PostMapping("/admin/add")
     public String addOrUpdateProduct(
@@ -62,15 +53,14 @@ public class AdminController {
     ) {
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("productId", id); // important for edit
+            model.addAttribute("productId", id);
             return "admin";
         }
 
         Product product;
 
         if (id != null) {
-            // 👉 UPDATE FLOW
-            Product existingProduct = productRepository.findById(id)
+            Product existing = productRepository.findById(id)
                     .orElseThrow(() -> new IllegalArgumentException("Invalid product id"));
 
             product = Product.builder()
@@ -78,11 +68,8 @@ public class AdminController {
                     .price(productRequest.getPrice())
                     .build();
 
-            // 🔑 THIS LINE DECIDES UPDATE vs INSERT
-            product.setId(existingProduct.getId());
-
+            product.setId(existing.getId());
         } else {
-            // 👉 ADD FLOW
             product = Product.builder()
                     .name(productRequest.getName())
                     .price(productRequest.getPrice())
@@ -92,8 +79,4 @@ public class AdminController {
         productRepository.save(product);
         return "redirect:/";
     }
-
-
-
-
 }
