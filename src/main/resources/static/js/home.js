@@ -33,3 +33,12 @@ productScroll.addEventListener("scroll", () => {
     li.classList.toggle("active", li.dataset.cat === current);
   });
 });
+function scrollFromData(el) {
+  const cat = el.getAttribute("data-cat");
+  if (!cat) return;
+
+  const section = document.getElementById(cat);
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth" });
+  }
+}

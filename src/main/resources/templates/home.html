@@ -11,16 +11,6 @@
 
 <!-- ================= HEADER ================= -->
 <header class="navbar glass fixed-header">
-
-    <!-- ADD THIS -->
-    <div class="mobile-categories">
-        <span onclick="scrollToCategory('FARSAN')">Farsan</span>
-        <span onclick="scrollToCategory('CHIWADA')">Chiwada</span>
-        <span onclick="scrollToCategory('FASTING_SPECIAL')">Fasting Special</span>
-        <span onclick="scrollToCategory('ALL_TIME_FAV')">Popular</span>
-        <span onclick="scrollToCategory('DAL')">Dal</span>
-        <span onclick="scrollToCategory('NUTS')">Nuts</span>
-    </div>
     <div></div>
 
     <div class="center">
@@ -29,74 +19,71 @@
 
     <div class="right">
         <button id="themeToggle" class="theme-btn">🌙</button>
-        <a href="/login" class="btn">Admin</a>
+        <div class="cart-fab" onclick="toggleCart()">
+            🛒 <span id="cartCount">0</span>
+        </div>
     </div>
 </header>
 
 <!-- ================= CATEGORY SIDEBAR ================= -->
 <aside class="category-sidebar glass">
     <h3>Categories</h3>
-    <ul id="categoryList">
-        <li data-cat="FARSAN" onclick="scrollToCategory('FARSAN')">Farsan</li>
-        <li data-cat="CHIWADA" onclick="scrollToCategory('CHIWADA')">Chiwada</li>
-        <li data-cat="FASTING_SPECIAL" onclick="scrollToCategory('FASTING_SPECIAL')">Fasting Special</li>
-        <li data-cat="CHAKALI" onclick="scrollToCategory('CHAKALI')">Chakali</li>
-        <li data-cat="SHEV" onclick="scrollToCategory('SHEV')">Shev</li>
-        <li data-cat="DAL" onclick="scrollToCategory('DAL')">Dal</li>
-
-        <!-- ✅ MISSING CATEGORY FIXED -->
-        <li data-cat="ALL_TIME_FAV" onclick="scrollToCategory('ALL_TIME_FAV')">
-             All-Time Favourites
+    <ul>
+        <li th:each="c : ${T(com.vedant.store.model.Category).values()}"
+            th:text="${#strings.replace(c.name(),'_',' ')}"
+            th:attr="data-cat=${c.name()}"
+            onclick="scrollFromData(this)">
         </li>
-
-        <li data-cat="NUTS" onclick="scrollToCategory('NUTS')">Nuts</li>
     </ul>
 </aside>
 
-<!-- ================= PRODUCT SCROLL AREA ================= -->
-<main class="product-scroll" id="productScroll">
+<!-- ================= PRODUCT SCROLL ================= -->
+<main class="product-scroll">
 
-    <section th:each="category : ${T(com.vedant.store.model.Category).values()}"
-             th:id="${category.name()}"
-             class="category-section">
+    <section th:each="c : ${T(com.vedant.store.model.Category).values()}"
+             th:id="${c.name()}">
 
-        <div class="category-header">
-            <h2 th:text="${#strings.replace(category.name(),'_',' ')}"></h2>
-            <button class="toggle-btn" onclick="toggleCategory(this)">⌄</button>
-        </div>
+        <h2 th:text="${#strings.replace(c.name(),'_',' ')}"></h2>
 
-        <div class="grid category-content">
+        <div class="grid">
             <div class="product-card glass"
-                 th:each="product : ${products}"
-                 th:if="${product.category == category}">
+                 th:each="p : ${products}"
+                 th:if="${p.category == c}">
 
                 <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24">
 
-                <h3 th:text="${product.name}"></h3>
+                <h3 th:text="${p.name}"></h3>
 
-                <div class="badge"
-                     th:text="${#strings.replace(product.category.name(),'_',' ')}">
-                </div>
+                <span>₹ <span th:text="${p.price}"></span></span>
 
-                <span>₹ <span th:text="${product.price}"></span></span>
-
-                <a th:href="@{/product/{id}(id=${product.id})}" class="btn">
+                <a th:href="@{/product/{id}(id=${p.id})}" class="btn">
                     View / Order
                 </a>
             </div>
         </div>
     </section>
 
-    <!-- ================= FOOTER ================= -->
-    <footer class="glass full-footer">
-        <p><strong>CSG Store</strong></p>
-        <p>Orders via WhatsApp only</p>
-    </footer>
-
 </main>
+
+<!-- ================= CART DRAWER ================= -->
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+        <h3>Your Cart</h3>
+        <button onclick="toggleCart()">✕</button>
+    </div>
+
+    <div id="cartItems"></div>
+
+    <div class="cart-footer">
+        <button class="btn" onclick="placeOrderOnWhatsApp()">
+            Order on WhatsApp
+        </button>
+    </div>
+</div>
 
 <script src="/js/theme.js"></script>
 <script src="/js/home.js"></script>
+<script src="/js/cart.js"></script>
 
 </body>
 </html>
