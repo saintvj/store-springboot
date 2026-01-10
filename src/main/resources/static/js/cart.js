@@ -21,31 +21,26 @@ function updateCartCount() {
 
 function addToCart(product) {
   const cart = getCart();
+  const existing = cart.find(i => i.id === product.id);
 
-  // ❌ do NOT auto-increase on re-click
-  if (cart.some(p => p.id === product.id)) {
-    return;
-  }
+  if (existing) return; // do NOT re-add
 
   cart.push(product);
   saveCart(cart);
-  showToast("Added to cart 🛒");
   flashCart();
+  showToast("Added to cart 🛒");
 }
 
 /* ================= CART UI ================= */
 
 function toggleCart() {
-  const drawer = document.getElementById("cartDrawer");
-  if (!drawer) return;
-  drawer.classList.toggle("open");
+  document.getElementById("cartDrawer").classList.toggle("open");
   renderCart();
 }
 
 function renderCart() {
   const cart = getCart();
   const container = document.getElementById("cartItems");
-
   if (!container) return;
 
   if (cart.length === 0) {
@@ -71,9 +66,9 @@ function renderCart() {
 
         <div class="cart-row">
           <div class="qty-controls">
-            <button onclick="changeQty(${item.id}, -100)">−</button>
+            <button onclick="changeQty(${item.id}, 'dec')">−</button>
             <span>${item.quantityInGrams} g</span>
-            <button onclick="changeQty(${item.id}, 100)">+</button>
+            <button onclick="changeQty(${item.id}, 'inc')">+</button>
           </div>
           <div class="price">₹${price}</div>
         </div>
@@ -88,15 +83,24 @@ function renderCart() {
   `;
 }
 
-/* ================= QUANTITY ================= */
+/* ================= QUANTITY LOGIC ================= */
 
-function changeQty(id, delta) {
+function changeQty(id, type) {
   const cart = getCart();
   const item = cart.find(p => p.id === id);
   if (!item) return;
 
-  item.quantityInGrams += delta;
-  if (item.quantityInGrams < 100) item.quantityInGrams = 100;
+  if (type === "inc") {
+    item.quantityInGrams *= 2;
+  }
+
+  if (type === "dec") {
+    if (item.quantityInGrams === item.baseQuantityGrams) {
+      removeFromCart(id);
+      return;
+    }
+    item.quantityInGrams /= 2;
+  }
 
   saveCart(cart);
   renderCart();
@@ -144,17 +148,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.getElementById("addToCartBtn");
   const removeBtn = document.getElementById("removeFromCartBtn");
   const card = document.getElementById("productCard");
-
   if (!addBtn || !card) return;
 
   const productId = parseInt(card.dataset.id, 10);
   const cart = getCart();
 
-  // already in cart
   if (cart.some(p => p.id === productId)) {
     addBtn.textContent = "Added ✓";
-    addBtn.disabled = true;
     addBtn.classList.add("added");
+    addBtn.disabled = true;
     if (removeBtn) removeBtn.style.display = "inline-block";
   }
 
@@ -164,14 +166,15 @@ document.addEventListener("DOMContentLoaded", () => {
     addToCart({
       id: productId,
       name: card.dataset.name,
-      pricePerKg: parseInt(card.dataset.price, 10),
+      pricePerKg: parseInt(card.dataset.price),
       quantityInGrams: qty,
+      baseQuantityGrams: qty,
       category: card.dataset.category
     });
 
     addBtn.textContent = "Added ✓";
-    addBtn.disabled = true;
     addBtn.classList.add("added");
+    addBtn.disabled = true;
     if (removeBtn) removeBtn.style.display = "inline-block";
   });
 
@@ -183,19 +186,19 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-/* ================= VISUAL FEEDBACK ================= */
+/* ================= VISUAL HELPERS ================= */
+
+function flashCart() {
+  const fab = document.querySelector(".cart-fab");
+  if (!fab) return;
+  fab.classList.add("flash");
+  setTimeout(() => fab.classList.remove("flash"), 800);
+}
 
 function showToast(text) {
   const toast = document.getElementById("toast");
   if (!toast) return;
   toast.textContent = text;
   toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 1500);
-}
-
-function flashCart() {
-  const fab = document.querySelector(".cart-fab");
-  if (!fab) return;
-  fab.classList.add("flash");
-  setTimeout(() => fab.classList.remove("flash"), 700);
+  setTimeout(() => toast.classList.remove("show"), 1800);
 }

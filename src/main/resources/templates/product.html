@@ -9,7 +9,6 @@
 
 <body class="product-page">
 
-<!-- HEADER -->
 <header class="navbar glass fixed-header">
     <div></div>
     <div class="center"><h1>CSG Store</h1></div>
@@ -19,9 +18,7 @@
     </div>
 </header>
 
-<!-- PRODUCT CARD -->
 <main class="detail-wrapper">
-
     <div class="detail-card glass"
          id="productCard"
          th:data-id="${product.id}"
@@ -33,11 +30,8 @@
 
         <h2 th:text="${product.name}"></h2>
 
-        <p class="price">
-            ₹ <span th:text="${product.price}"></span> / kg
-        </p>
+        <p class="price">₹ <span th:text="${product.price}"></span> / kg</p>
 
-        <!-- Quantity -->
         <select class="qty" id="qty">
             <option value="500">500 g</option>
             <option value="1000" selected>1 kg</option>
@@ -46,25 +40,20 @@
             <option value="2500">2.5 kg</option>
         </select>
 
-        <!-- ACTIONS -->
-        <button id="addToCartBtn" class="btn">
-            Add to Cart
-        </button>
+        <div class="btn-group">
+            <button id="addToCartBtn" class="btn">Add to Cart</button>
 
-        <button id="removeFromCartBtn"
-                class="btn secondary"
-                style="display:none">
-            Remove from Cart
-        </button>
+            <button id="removeFromCartBtn"
+                    class="btn secondary"
+                    style="display:none">
+                Remove from Cart
+            </button>
 
-        <a href="/" class="btn secondary">
-            Add more items
-        </a>
+            <a href="/" class="btn secondary">Add more items</a>
+        </div>
     </div>
-
 </main>
 
-<!-- CART DRAWER -->
 <div class="cart-drawer" id="cartDrawer">
     <div class="cart-header">
         <h3>Your Cart</h3>
@@ -84,6 +73,5 @@
 
 <script src="/js/theme.js"></script>
 <script src="/js/cart.js"></script>
-
 </body>
 </html>

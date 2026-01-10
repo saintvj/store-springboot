@@ -1095,3 +1095,18 @@ body {
   background: #16a34a; /* green */
   cursor: default;
 }
+.product-page .detail-card .btn-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.product-page .btn {
+  min-width: 140px;
+  justify-content: center;
+}
+
+.product-page .btn.added {
+  background: #16a34a;
+  cursor: default;
+}
