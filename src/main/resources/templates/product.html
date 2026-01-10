@@ -14,9 +14,14 @@
              alt="Product image">
 
         <h2 th:text="${product.name}">Product Name</h2>
-        <p><strong>₹ <span th:text="${product.price}">0</span> / 100g</strong></p>
 
-        <!-- Quantity Dropdown -->
+        <p>
+            <strong>
+                ₹ <span th:text="${product.price}">0</span> / kg
+            </strong>
+        </p>
+
+        <!-- Quantity -->
         <label for="qty"><strong>Select Quantity</strong></label>
         <select class="qty" id="qty">
             <option value="100">100 g</option>
@@ -29,7 +34,7 @@
             <option value="4000">4 kg</option>
         </select>
 
-        <!-- Order Button -->
+        <!-- Order -->
         <a id="orderBtn"
            class="btn"
            th:href="@{/order/{id}(id=${product.id}, qty=1000)}">
@@ -42,12 +47,11 @@
 
 <footer class="glass">
     <p><strong>CSG Store</strong></p>
-    <p>Near Main Market, Your City, India</p>
+    <p>Kherdi Malewadi, Chiplun</p>
     <p>Phone / WhatsApp: +91 98765 43210</p>
     <p>Orders via WhatsApp only</p>
 </footer>
 
-<!-- Minimal JS -->
 <script>
     const qtySelect = document.getElementById("qty");
     const orderBtn = document.getElementById("orderBtn");

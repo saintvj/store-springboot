@@ -1,9 +1,15 @@
 package com.vedant.store.model;
 
 import jakarta.persistence.*;
+import com.vedant.store.model.Category;
 
 @Entity
 public class Product {
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Category category;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,6 +27,7 @@ public class Product {
     private Product(Builder builder) {
         this.name = builder.name;
         this.price = builder.price;
+        this.category = builder.category;;
     }
 
     public static Builder builder() {
@@ -30,6 +37,12 @@ public class Product {
     public static class Builder {
         private String name;
         private int price;
+        private Category category;
+
+        public Builder category(Category category) {
+            this.category = category;
+            return this;
+        }
 
         public Builder name(String name) {
             this.name = name;
@@ -67,5 +80,9 @@ public class Product {
 
     public int getPrice() {
         return price;
+    }
+
+    public Category getCategory() {
+        return category;
     }
 }

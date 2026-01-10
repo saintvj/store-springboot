@@ -1,15 +1,110 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Error</title>
+    <title>Oops… That Was Awkward 😅</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Fun Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Fredoka', system-ui, sans-serif;
+            background: linear-gradient(135deg, #ffecd2, #fcb69f);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2d2d2d;
+        }
+
+        .card {
+            max-width: 420px;
+            padding: 32px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.45);
+            backdrop-filter: blur(14px);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.15);
+        }
+
+        .emoji {
+            font-size: 4rem;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin: 10px 0;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        .message {
+            font-size: 1rem;
+            margin-bottom: 24px;
+            color: #444;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 22px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #ff6a00, #ee0979);
+            color: white;
+            text-decoration: none;
+            font-size: 0.95rem;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .footer-note {
+            margin-top: 18px;
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+
+        code {
+            background: rgba(0,0,0,0.08);
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+    </style>
 </head>
+
 <body>
 
-<h2>Oops!</h2>
+<div class="card">
+    <div class="emoji">🤦‍♂️</div>
 
-<p th:text="${message}">Something went wrong.</p>
+    <h1>Oops!</h1>
 
-<a href="/">Go back to Home</a>
+    <div class="subtitle">
+        Looks like the developer had too much chai ☕
+    </div>
+
+    <div class="message">
+        <p th:text="${message}">
+            Something went wrong on our side.
+        </p>
+        <p>
+            Don’t worry — nothing is broken forever.
+        </p>
+    </div>
+
+    <a href="/" class="btn">Take Me Home 🏠</a>
+
+    <div class="footer-note">
+        Error handled gracefully.<br/>
+        <code>CSG Store · Spring Boot</code>
+    </div>
+</div>
 
 </body>
 </html>

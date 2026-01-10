@@ -3,8 +3,21 @@ package com.vedant.store.dto;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import com.vedant.store.model.Category;
+import jakarta.validation.constraints.NotNull;
 
 public class ProductRequest {
+
+    @NotNull(message = "Category is required")
+    private Category category;
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
 
     @NotBlank(message = "Product name cannot be empty")
     private  String name;

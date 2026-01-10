@@ -1,21 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Admin Panel</title>
+    <title>Admin Panel | CSG Store</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     <link rel="stylesheet" href="/css/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
 
+<!-- ================= HEADER ================= -->
 <header class="glass">
     <h2>Admin Panel – Manage Products</h2>
-    <a href="/" class="btn">View Store</a>
-    <a href="/logout" class="btn danger">Logout</a>
+    <div>
+        <a href="/" class="btn">View Store</a>
+        <a href="/logout" class="btn danger">Logout</a>
+    </div>
 </header>
 
+<!-- ================= MAIN ================= -->
 <div class="admin-wrapper">
 
-    <!-- ================= ADD / EDIT FORM ================= -->
+    <!-- ===== ADD / EDIT PRODUCT ===== -->
     <div class="admin-card glass">
 
         <h3 th:text="${productId != null ? 'Edit Product' : 'Add New Product'}">
@@ -27,32 +34,54 @@
               method="post">
 
             <!-- Hidden ID for edit -->
-            <input type="hidden" name="id" th:value="${productId}" />
+            <input type="hidden" name="id" th:value="${productId}"/>
 
+            <!-- Product Name -->
             <label>Product Name</label>
             <input type="text"
                    th:field="*{name}"
                    placeholder="Enter product name"
-                   required />
+                   required/>
 
             <div class="error"
                  th:if="${#fields.hasErrors('name')}"
                  th:errors="*{name}"></div>
 
-            <br>
-
+            <!-- Price -->
             <label>Price (₹ per kg)</label>
             <input type="number"
                    th:field="*{price}"
                    placeholder="Enter price per kg"
-                   required />
+                   required/>
 
             <div class="error"
                  th:if="${#fields.hasErrors('price')}"
                  th:errors="*{price}"></div>
 
-            <br>
+            <!-- Category -->
+            <label>Category</label>
+            <select th:field="*{category}" required>
+                <option value="">-- Select Category --</option>
+                <option value="FARSAN">Farsan</option>
+                <option value="CHIWADA">Chiwada</option>
+                <option value="FASTING_SPECIAL">Fasting Special</option>
+                <option value="CHAKALI">Chakali</option>
+                <option value="SHEV">Shev</option>
+                <option value="DAL">Dal</option>
+                <option value="ALL_TIME_FAV">All-time Favourite Snacks</option>
+                <option value="NUTS">Nuts</option>
+            </select>
 
+            <div class="error"
+                 th:if="${#fields.hasErrors('category')}"
+                 th:errors="*{category}"></div>
+
+            <!-- Image Upload (future) -->
+            <label>Product Image</label>
+            <input type="file" disabled/>
+            <small>Image upload coming soon</small>
+
+            <!-- Submit -->
             <button type="submit" class="btn primary">
                 <span th:text="${productId != null ? 'Update Product' : 'Add Product'}">
                     Add Product
@@ -62,7 +91,7 @@
         </form>
     </div>
 
-    <!-- ================= PRODUCT LIST ================= -->
+    <!-- ===== PRODUCT LIST ===== -->
     <div class="admin-card glass">
 
         <h3>Existing Products</h3>
@@ -71,6 +100,7 @@
             <thead>
             <tr>
                 <th>Name</th>
+                <th>Category</th>
                 <th>Price (₹/kg)</th>
                 <th>Actions</th>
             </tr>
@@ -79,9 +109,11 @@
             <tbody>
             <tr th:each="product : ${products}">
                 <td th:text="${product.name}">Name</td>
+                <td th:text="${product.category}">Category</td>
                 <td th:text="${product.price}">Price</td>
                 <td>
-                    <a th:href="@{/admin/edit/{id}(id=${product.id})}" class="btn small">
+                    <a th:href="@{/admin/edit/{id}(id=${product.id})}"
+                       class="btn small">
                         Edit
                     </a>
                     <a th:href="@{/admin/delete/{id}(id=${product.id})}"
@@ -98,6 +130,7 @@
 
 </div>
 
+<!-- ================= FOOTER ================= -->
 <footer class="glass">
     <p><strong>CSG Store Admin</strong></p>
     <p>Manage products easily</p>

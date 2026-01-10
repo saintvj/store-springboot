@@ -6,6 +6,9 @@ import com.vedant.store.repository.ProductRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import com.vedant.store.model.Category;
+import java.util.Arrays;
+
 
 @Controller
 public class AdminController {
@@ -20,6 +23,8 @@ public class AdminController {
     public String adminPage(Model model) {
         model.addAttribute("productRequest", new ProductRequest());
         model.addAttribute("products", productRepository.findAll());
+        model.addAttribute("categories", Category.values());
+
         return "admin";
     }
 
@@ -32,6 +37,9 @@ public class AdminController {
         ProductRequest productRequest = new ProductRequest();
         productRequest.setName(product.getName());
         productRequest.setPrice(product.getPrice());
+        productRequest.setCategory(product.getCategory());
+        model.addAttribute("categories", Category.values());
+
 
         model.addAttribute("productRequest", productRequest);
         model.addAttribute("productId", id);
@@ -44,7 +52,7 @@ public class AdminController {
     @GetMapping("/admin/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 
     @PostMapping("/admin/add")
@@ -69,17 +77,21 @@ public class AdminController {
             product = Product.builder()
                     .name(productRequest.getName())
                     .price(productRequest.getPrice())
+                    .category(productRequest.getCategory())
                     .build();
+
 
             product.setId(existing.getId());
         } else {
             product = Product.builder()
                     .name(productRequest.getName())
                     .price(productRequest.getPrice())
+                    .category(productRequest.getCategory())
                     .build();
+
         }
 
         productRepository.save(product);
-        return "redirect:/";
+        return "redirect:/admin";
     }
 }

@@ -5,45 +5,62 @@
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 
-    <!-- IMPORTANT: CSS must load -->
+    <!-- Global Styles -->
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
 
-<!-- NAVBAR -->
-<div class="navbar glass">
+<!-- ================= NAVBAR ================= -->
+<header class="navbar glass">
     <div>
         <h1>CSG Store</h1>
         <p>Fresh snacks from our local store</p>
     </div>
     <a href="/login">Admin Login</a>
-</div>
+</header>
 
-<!-- PRODUCT GRID -->
-<div class="container">
+<!-- ================= PRODUCT GRID ================= -->
+<main class="container">
     <div class="grid">
 
-        <div class="product-card glass" th:each="product : ${products}">
+        <!-- SINGLE, CORRECT LOOP -->
+        <div class="product-card glass"
+             th:each="product : ${products}">
+
+            <!-- Product Image (dummy for now) -->
             <img
                     src="https://images.unsplash.com/photo-1604909052743-94e838986d24"
                     alt="Snack image"/>
 
+            <!-- Product Name -->
             <h3 th:text="${product.name}">Product Name</h3>
-            <span>₹ <span th:text="${product.price}">0</span></span>
 
+            <!-- Category Badge -->
+            <div class="badge"
+                 th:text="${product.category}">
+                Category
+            </div>
+
+            <!-- Price -->
+            <span>
+                ₹ <span th:text="${product.price}">0</span>
+            </span>
+
+            <!-- CTA -->
             <a th:href="@{/product/{id}(id=${product.id})}">
                 View / Order
             </a>
+
         </div>
 
     </div>
-</div>
+</main>
 
-<!-- FOOTER -->
+<!-- ================= FOOTER ================= -->
 <footer class="glass">
     <p><strong>CSG Store</strong></p>
-    <p>Near Main Market, Your City, India</p>
+    <p>Kherdi Malewadi, Chiplun</p>
     <p>Phone / WhatsApp: +91 98765 43210</p>
     <p>Orders via WhatsApp only</p>
 </footer>
