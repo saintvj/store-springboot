@@ -4,66 +4,68 @@
     <title>CSG Store</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-    <!-- Global Styles -->
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body>
 
-<!-- ================= NAVBAR ================= -->
-<header class="navbar glass">
-    <div>
-        <h1>CSG Store</h1>
-        <p>Fresh snacks from our local store</p>
+<header class="navbar glass fixed-header">
+    <div></div>
+    <div class="center"><h1>CSG Store</h1></div>
+    <div class="right">
+        <button id="themeToggle" class="theme-btn">🌙</button>
+        <a href="/login">Admin</a>
     </div>
-    <a href="/login">Admin Login</a>
 </header>
 
-<!-- ================= PRODUCT GRID ================= -->
-<main class="container">
-    <div class="grid">
+<aside class="category-sidebar glass">
+    <h3>Categories</h3>
+    <ul id="categoryList">
+        <li data-cat="FARSAN" onclick="scrollToCategory('FARSAN')">Farsan</li>
+        <li data-cat="CHIWADA" onclick="scrollToCategory('CHIWADA')">Chiwada</li>
+        <li data-cat="FASTING_SPECIAL" onclick="scrollToCategory('FASTING_SPECIAL')">Fasting Special</li>
+        <li data-cat="CHAKALI" onclick="scrollToCategory('CHAKALI')">Chakali</li>
+        <li data-cat="SHEV" onclick="scrollToCategory('SHEV')">Shev</li>
+        <li data-cat="DAL" onclick="scrollToCategory('DAL')">Dal</li>
+        <li data-cat="NUTS" onclick="scrollToCategory('NUTS')">Nuts</li>
+    </ul>
+</aside>
 
-        <!-- SINGLE, CORRECT LOOP -->
-        <div class="product-card glass"
-             th:each="product : ${products}">
+<main class="product-scroll" id="productScroll">
 
-            <!-- Product Image (dummy for now) -->
-            <img
-                    src="https://images.unsplash.com/photo-1604909052743-94e838986d24"
-                    alt="Snack image"/>
+    <section th:each="category : ${T(com.vedant.store.model.Category).values()}"
+             th:id="${category.name()}"
+             class="category-section">
 
-            <!-- Product Name -->
-            <h3 th:text="${product.name}">Product Name</h3>
-
-            <!-- Category Badge -->
-            <div class="badge"
-                 th:text="${product.category}">
-                Category
-            </div>
-
-            <!-- Price -->
-            <span>
-                ₹ <span th:text="${product.price}">0</span>
-            </span>
-
-            <!-- CTA -->
-            <a th:href="@{/product/{id}(id=${product.id})}">
-                View / Order
-            </a>
-
+        <div class="category-header">
+            <h2 th:text="${category}"></h2>
+            <button class="toggle-btn" onclick="toggleCategory(this)">⌄</button>
         </div>
 
-    </div>
+        <div class="grid category-content">
+            <div class="product-card glass"
+                 th:each="product : ${products}"
+                 th:if="${product.category == category}">
+                <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24">
+                <h3 th:text="${product.name}"></h3>
+                <div class="badge" th:text="${product.category}"></div>
+                <span>₹ <span th:text="${product.price}"></span></span>
+                <a th:href="@{/product/{id}(id=${product.id})}" class="btn">
+                    View / Order
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="glass full-footer">
+        <p><strong>CSG Store</strong></p>
+        <p>Orders via WhatsApp only</p>
+    </footer>
+
 </main>
 
-<!-- ================= FOOTER ================= -->
-<footer class="glass">
-    <p><strong>CSG Store</strong></p>
-    <p>Kherdi Malewadi, Chiplun</p>
-    <p>Phone / WhatsApp: +91 98765 43210</p>
-    <p>Orders via WhatsApp only</p>
-</footer>
+<script src="/js/theme.js"></script>
+<script src="/js/home.js"></script>
 
 </body>
 </html>

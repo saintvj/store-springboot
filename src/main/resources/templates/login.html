@@ -4,36 +4,31 @@
     <title>Admin Login | CSG Store</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
     <link rel="stylesheet" href="/css/style.css">
-    <script src="/js/theme.js" defer></script>
 </head>
 
-<body>
+<body class="login-page">
 
-<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;">
-    <div class="glass" style="width:360px;padding:28px;text-align:center;">
+<div class="glass">
+    <button id="themeToggle" class="theme-btn">🌙</button>
 
-        <h2>Admin Login</h2>
-        <p style="margin:10px 0 20px;">CSG Store Admin Panel</p>
+    <h2>Admin Login</h2>
+    <p>CSG Store Admin Panel</p>
 
-        <form th:action="@{/login}" method="post">
-            <input type="text" name="username" placeholder="Username" required
-                   style="width:100%;padding:12px;margin-bottom:12px;border-radius:10px;border:1px solid #ccc"/>
+    <form th:action="@{/login}" method="post">
+        <input type="text" name="username" placeholder="Username" required>
+        <input type="password" name="password" placeholder="Password" required>
 
-            <input type="password" name="password" placeholder="Password" required
-                   style="width:100%;padding:12px;margin-bottom:12px;border-radius:10px;border:1px solid #ccc"/>
+        <div th:if="${param.error}" class="error">
+            Invalid username or password
+        </div>
 
-            <div th:if="${param.error}" style="color:red;font-size:0.85rem;margin-bottom:10px;">
-                Invalid username or password
-            </div>
+        <button type="submit" class="btn">Login</button>
+    </form>
 
-            <button type="submit" class="btn" style="width:100%;">Login</button>
-        </form>
-
-        <a href="/" style="display:block;margin-top:14px;font-size:0.85rem;">← Back to Store</a>
-    </div>
+    <a href="/">← Back to Store</a>
 </div>
 
+<script src="/js/theme.js"></script>
 </body>
 </html>

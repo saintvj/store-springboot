@@ -2,64 +2,113 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title th:text="${product.name}">Product</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="stylesheet" href="/css/style.css">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body>
 
-<div class="detail-wrapper">
-    <div class="detail-card glass">
+<body class="product-page">
 
-        <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24"
-             alt="Product image">
+<!-- ================= HEADER ================= -->
+<header class="navbar glass fixed-header">
+    <div></div>
 
-        <h2 th:text="${product.name}">Product Name</h2>
-
-        <p>
-            <strong>
-                ₹ <span th:text="${product.price}">0</span> / kg
-            </strong>
-        </p>
-
-        <!-- Quantity -->
-        <label for="qty"><strong>Select Quantity</strong></label>
-        <select class="qty" id="qty">
-            <option value="100">100 g</option>
-            <option value="200">200 g</option>
-            <option value="250">250 g</option>
-            <option value="500">500 g</option>
-            <option value="1000" selected>1 kg</option>
-            <option value="2000">2 kg</option>
-            <option value="3000">3 kg</option>
-            <option value="4000">4 kg</option>
-        </select>
-
-        <!-- Order -->
-        <a id="orderBtn"
-           class="btn"
-           th:href="@{/order/{id}(id=${product.id}, qty=1000)}">
-            Order on WhatsApp
-        </a>
-
-        <a href="/" class="back-link">← Back to Store</a>
+    <div class="center">
+        <h1>CSG Store</h1>
     </div>
-</div>
 
-<footer class="glass">
+    <div class="right">
+        <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
+</header>
+
+<!-- ================= PRODUCT + UPSELL LAYOUT ================= -->
+<main class="detail-wrapper">
+
+    <div class="product-layout">
+
+        <!-- ===== PRODUCT CARD ===== -->
+        <div class="detail-card glass">
+
+            <img
+                    src="https://images.unsplash.com/photo-1604909052743-94e838986d24"
+                    alt="Product image"
+            >
+
+            <h2 th:text="${product.name}">Product Name</h2>
+
+            <p class="price">
+                ₹ <span th:text="${product.price}">0</span> / kg
+            </p>
+
+            <div class="product-actions">
+
+                <select class="qty" id="qty">
+                    <option value="100">100 g</option>
+                    <option value="250">250 g</option>
+                    <option value="500">500 g</option>
+                    <option value="1000" selected>1 kg</option>
+                    <option value="2000">2 kg</option>
+                    <option value="5000">5 kg</option>
+                </select>
+
+                <a id="orderBtn"
+                   class="btn"
+                   th:href="@{/order/{id}(id=${product.id}, qty=1000)}">
+                    Order on WhatsApp
+                </a>
+
+            </div>
+
+            <a href="/" class="back-link">← Back to Store</a>
+
+        </div>
+
+        <!-- ===== UPSELL PANEL ===== -->
+        <div class="upsell-panel glass" id="upsellPanel">
+
+            <h3>Add more items?</h3>
+            <p>You can add another snack or continue ordering.</p>
+
+            <a href="/" class="btn secondary">Add More Items</a>
+
+            <a id="finalOrderBtn" class="btn">
+                Order on WhatsApp
+            </a>
+
+        </div>
+
+    </div>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="glass full-footer">
     <p><strong>CSG Store</strong></p>
-    <p>Kherdi Malewadi, Chiplun</p>
-    <p>Phone / WhatsApp: +91 98765 43210</p>
-    <p>Orders via WhatsApp only</p>
+    <p>WhatsApp Orders Only</p>
 </footer>
 
+<!-- ================= SCRIPTS ================= -->
+<script src="/js/theme.js"></script>
+
 <script>
+    // Quantity change
     const qtySelect = document.getElementById("qty");
     const orderBtn = document.getElementById("orderBtn");
+    const finalOrderBtn = document.getElementById("finalOrderBtn");
+    const layout = document.querySelector(".product-layout");
 
     qtySelect.addEventListener("change", () => {
         const qty = qtySelect.value;
-        const baseUrl = orderBtn.getAttribute("href").split("?")[0];
-        orderBtn.setAttribute("href", baseUrl + "?qty=" + qty);
+        const base = orderBtn.href.split("?")[0];
+        orderBtn.href = base + "?qty=" + qty;
+    });
+
+    // Upsell trigger
+    orderBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        finalOrderBtn.href = orderBtn.href;
+        layout.classList.add("show-upsell");
     });
 </script>
 

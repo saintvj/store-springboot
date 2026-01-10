@@ -4,96 +4,53 @@
     <title>Admin Panel | CSG Store</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body>
+<body class="admin-page">
 
-<!-- ================= HEADER ================= -->
-<header class="glass">
+<header class="glass navbar">
     <h2>Admin Panel – Manage Products</h2>
     <div>
+        <button id="themeToggle" class="theme-btn">🌙</button>
         <a href="/" class="btn">View Store</a>
         <a href="/logout" class="btn danger">Logout</a>
     </div>
 </header>
 
-<!-- ================= MAIN ================= -->
 <div class="admin-wrapper">
 
-    <!-- ===== ADD / EDIT PRODUCT ===== -->
+    <!-- ADD PRODUCT -->
     <div class="admin-card glass">
+        <h3>Add / Edit Product</h3>
 
-        <h3 th:text="${productId != null ? 'Edit Product' : 'Add New Product'}">
-            Add New Product
-        </h3>
+        <form th:action="@{/admin/add}" th:object="${productRequest}" method="post">
+            <input type="hidden" name="id" th:value="${productId}">
 
-        <form th:action="@{/admin/add}"
-              th:object="${productRequest}"
-              method="post">
-
-            <!-- Hidden ID for edit -->
-            <input type="hidden" name="id" th:value="${productId}"/>
-
-            <!-- Product Name -->
             <label>Product Name</label>
-            <input type="text"
-                   th:field="*{name}"
-                   placeholder="Enter product name"
-                   required/>
+            <input type="text" th:field="*{name}" required>
 
-            <div class="error"
-                 th:if="${#fields.hasErrors('name')}"
-                 th:errors="*{name}"></div>
+            <label>Price (₹ / kg)</label>
+            <input type="number" th:field="*{price}" required>
 
-            <!-- Price -->
-            <label>Price (₹ per kg)</label>
-            <input type="number"
-                   th:field="*{price}"
-                   placeholder="Enter price per kg"
-                   required/>
-
-            <div class="error"
-                 th:if="${#fields.hasErrors('price')}"
-                 th:errors="*{price}"></div>
-
-            <!-- Category -->
             <label>Category</label>
             <select th:field="*{category}" required>
-                <option value="">-- Select Category --</option>
                 <option value="FARSAN">Farsan</option>
                 <option value="CHIWADA">Chiwada</option>
                 <option value="FASTING_SPECIAL">Fasting Special</option>
                 <option value="CHAKALI">Chakali</option>
                 <option value="SHEV">Shev</option>
                 <option value="DAL">Dal</option>
-                <option value="ALL_TIME_FAV">All-time Favourite Snacks</option>
+                <option value="ALL_TIME_FAVOURITE">All-time Favourite</option>
                 <option value="NUTS">Nuts</option>
             </select>
 
-            <div class="error"
-                 th:if="${#fields.hasErrors('category')}"
-                 th:errors="*{category}"></div>
-
-            <!-- Image Upload (future) -->
-            <label>Product Image</label>
-            <input type="file" disabled/>
-            <small>Image upload coming soon</small>
-
-            <!-- Submit -->
-            <button type="submit" class="btn primary">
-                <span th:text="${productId != null ? 'Update Product' : 'Add Product'}">
-                    Add Product
-                </span>
-            </button>
-
+            <button class="btn primary">Save</button>
         </form>
     </div>
 
-    <!-- ===== PRODUCT LIST ===== -->
+    <!-- PRODUCT TABLE -->
     <div class="admin-card glass">
-
         <h3>Existing Products</h3>
 
         <table class="admin-table">
@@ -101,40 +58,30 @@
             <tr>
                 <th>Name</th>
                 <th>Category</th>
-                <th>Price (₹/kg)</th>
+                <th>Price</th>
                 <th>Actions</th>
             </tr>
             </thead>
-
             <tbody>
             <tr th:each="product : ${products}">
-                <td th:text="${product.name}">Name</td>
-                <td th:text="${product.category}">Category</td>
-                <td th:text="${product.price}">Price</td>
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.category}"></td>
+                <td th:text="${product.price}"></td>
                 <td>
-                    <a th:href="@{/admin/edit/{id}(id=${product.id})}"
-                       class="btn small">
-                        Edit
-                    </a>
-                    <a th:href="@{/admin/delete/{id}(id=${product.id})}"
-                       class="btn small danger"
-                       onclick="return confirm('Delete this product?')">
-                        Delete
-                    </a>
+                    <a th:href="@{/admin/edit/{id}(id=${product.id})}" class="btn small">Edit</a>
+                    <a th:href="@{/admin/delete/{id}(id=${product.id})}" class="btn small danger">Delete</a>
                 </td>
             </tr>
             </tbody>
         </table>
-
     </div>
 
 </div>
 
-<!-- ================= FOOTER ================= -->
 <footer class="glass">
-    <p><strong>CSG Store Admin</strong></p>
-    <p>Manage products easily</p>
+    <p>CSG Store Admin</p>
 </footer>
 
+<script src="/js/theme.js"></script>
 </body>
 </html>
