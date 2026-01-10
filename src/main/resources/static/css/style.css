@@ -497,10 +497,6 @@ body {
    (does NOT affect other pages)
 ================================ */
 
-.home-page .category-sidebar,
-.home-page .product-scroll {
-  animation: home-enter 0.45s ease-out both;
-}
 
 .home-page .category-sidebar {
   animation-delay: 0.05s;
@@ -572,6 +568,9 @@ body {
     width: 100%;
   }
 }
+/* ================================
+   MOBILE CATEGORY SCROLLER (FIXED)
+================================ */
 .mobile-categories {
   display: none;
 }
@@ -580,12 +579,26 @@ body {
   .mobile-categories {
     display: flex;
     gap: 10px;
+
     overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+
+    -webkit-overflow-scrolling: touch; /* 🔥 IMPORTANT */
+    scroll-behavior: smooth;
+
     padding: 12px 16px;
     margin-top: 90px;
+
+    scrollbar-width: none;
+  }
+
+  .mobile-categories::-webkit-scrollbar {
+    display: none;
   }
 
   .mobile-categories span {
+    flex: 0 0 auto; /* 🔥 IMPORTANT */
     white-space: nowrap;
     padding: 8px 14px;
     border-radius: 999px;
@@ -594,7 +607,13 @@ body {
     font-size: 0.85rem;
     cursor: pointer;
   }
+
+  .mobile-categories span.active {
+    background: var(--accent);
+    color: white;
+  }
 }
+
 /* ================================
    MOBILE HEADER FIX
 ================================ */
