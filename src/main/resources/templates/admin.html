@@ -4,82 +4,144 @@
     <title>Admin Panel | CSG Store</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- Base styles -->
     <link rel="stylesheet" href="/css/style.css">
+    <!-- Admin-only polish -->
+    <link rel="stylesheet" href="/css/admin.css">
 </head>
 
 <body class="admin-page">
 
-<header class="glass navbar">
+<!-- ================= HEADER ================= -->
+<header class="glass navbar fixed-header">
     <h2>Admin Panel – Manage Products</h2>
-    <div>
+
+    <div class="admin-header-actions">
         <button id="themeToggle" class="theme-btn">🌙</button>
         <a href="/" class="btn">View Store</a>
         <a href="/logout" class="btn danger">Logout</a>
     </div>
 </header>
 
-<div class="admin-wrapper">
+<!-- ================= MAIN ================= -->
+<main class="admin-wrapper">
 
-    <!-- ADD PRODUCT -->
-    <div class="admin-card glass">
-        <h3>Add / Edit Product</h3>
+    <!-- ===== ADD / EDIT PRODUCT ===== -->
+    <section class="admin-card glass admin-form-card">
 
-        <form th:action="@{/admin/add}" th:object="${productRequest}" method="post">
-            <input type="hidden" name="id" th:value="${productId}">
+        <div class="admin-card-inner">
 
-            <label>Product Name</label>
-            <input type="text" th:field="*{name}" required>
+            <div class="admin-form-header">
+                <div>
+                    <h3>Add / Edit Product</h3>
+                    <p class="admin-hint">
+                        This is the control room 🧠
+                        Change snacks carefully.
+                    </p>
+                </div>
+                <span class="admin-emoji">🛠️</span>
+            </div>
 
-            <label>Price (₹ / kg)</label>
-            <input type="number" th:field="*{price}" required>
+            <form th:action="@{/admin/add}"
+                  th:object="${productRequest}"
+                  method="post"
+                  class="admin-form">
 
-            <label>Category</label>
-            <select th:field="*{category}" required>
-                <option value="FARSAN">Farsan</option>
-                <option value="CHIWADA">Chiwada</option>
-                <option value="FASTING_SPECIAL">Fasting Special</option>
-                <option value="CHAKALI">Chakali</option>
-                <option value="SHEV">Shev</option>
-                <option value="DAL">Dal</option>
-                <option value="ALL_TIME_FAVOURITE">All-time Favourite</option>
-                <option value="NUTS">Nuts</option>
-            </select>
+                <input type="hidden" name="id" th:value="${productId}">
 
-            <button class="btn primary">Save</button>
-        </form>
-    </div>
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text"
+                           th:field="*{name}"
+                           placeholder="e.g. Mix Farsan"
+                           required>
+                </div>
 
-    <!-- PRODUCT TABLE -->
-    <div class="admin-card glass">
-        <h3>Existing Products</h3>
+                <div class="form-group">
+                    <label>Price (₹ / kg)</label>
+                    <input type="number"
+                           th:field="*{price}"
+                           placeholder="e.g. 520"
+                           required>
+                </div>
 
-        <table class="admin-table">
-            <thead>
-            <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="product : ${products}">
-                <td th:text="${product.name}"></td>
-                <td th:text="${product.category}"></td>
-                <td th:text="${product.price}"></td>
-                <td>
-                    <a th:href="@{/admin/edit/{id}(id=${product.id})}" class="btn small">Edit</a>
-                    <a th:href="@{/admin/delete/{id}(id=${product.id})}" class="btn small danger">Delete</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-    </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select th:field="*{category}" required>
+                        <option value="">-- Select Category --</option>
+                        <option value="FARSAN">Farsan</option>
+                        <option value="CHIWADA">Chiwada</option>
+                        <option value="FASTING_SPECIAL">Fasting Special</option>
+                        <option value="CHAKALI">Chakali</option>
+                        <option value="SHEV">Shev</option>
+                        <option value="DAL">Dal</option>
+                        <option value="ALL_TIME_FAVOURITE">All-time Favourite</option>
+                        <option value="NUTS">Nuts</option>
+                    </select>
+                </div>
 
-</div>
+                <button class="btn primary full-width">
+                    💾 Save Product
+                </button>
+            </form>
 
-<footer class="glass">
-    <p>CSG Store Admin</p>
+        </div>
+    </section>
+
+    <!-- ===== PRODUCT TABLE ===== -->
+    <section class="admin-card glass admin-table-card">
+
+        <div class="admin-card-inner">
+
+            <div class="admin-table-header">
+                <h3>Existing Products</h3>
+                <p class="admin-hint">
+                    Total snacks under supervision 🍘
+                </p>
+            </div>
+
+            <table class="admin-table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price (₹)</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="product : ${products}">
+                    <td th:text="${product.name}"></td>
+                    <td>
+                        <span class="badge" th:text="${product.category}"></span>
+                    </td>
+                    <td th:text="${product.price}"></td>
+                    <td class="actions">
+                        <a th:href="@{/admin/edit/{id}(id=${product.id})}"
+                           class="btn small">
+                            Edit
+                        </a>
+                        <a th:href="@{/admin/delete/{id}(id=${product.id})}"
+                           class="btn small danger"
+                           onclick="return confirm('Delete this product?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="glass full-footer">
+    <p><strong>CSG Store Admin</strong></p>
+    <p>With great power comes great snacks 🥨</p>
 </footer>
 
 <script src="/js/theme.js"></script>

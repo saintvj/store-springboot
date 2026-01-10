@@ -4,29 +4,134 @@
     <title>Admin Login | CSG Store</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Small page-only animation -->
+    <style>
+        .login-card {
+            width: 420px;
+            padding: 36px 34px;
+            text-align: center;
+            animation: popIn 0.6s ease;
+        }
+
+        @keyframes popIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px) scale(0.96);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .login-title {
+            font-size: 1.6rem;
+            margin-bottom: 6px;
+        }
+
+        .login-sub {
+            font-size: 0.9rem;
+            opacity: 0.75;
+            margin-bottom: 22px;
+        }
+
+        .login-joke {
+            font-size: 0.8rem;
+            opacity: 0.6;
+            margin-bottom: 20px;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px 14px;
+            margin-bottom: 14px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .login-card input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .login-card .btn {
+            width: 100%;
+            margin-top: 6px;
+        }
+
+        .login-footer {
+            margin-top: 18px;
+            font-size: 0.85rem;
+            opacity: 0.75;
+        }
+
+        .login-footer a {
+            text-decoration: none;
+            color: var(--accent);
+        }
+
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .theme-toggle-wrap {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 6px;
+        }
+    </style>
 </head>
 
 <body class="login-page">
 
-<div class="glass">
-    <button id="themeToggle" class="theme-btn">🌙</button>
+<div class="glass login-card">
 
-    <h2>Admin Login</h2>
-    <p>CSG Store Admin Panel</p>
+    <!-- Dark mode toggle -->
+    <div class="theme-toggle-wrap">
+        <button id="themeToggle" class="theme-btn" title="Toggle dark mode">🌙</button>
+    </div>
+
+    <div style="font-size:1.4rem;">🧑‍💻</div>
+
+    <h2 class="login-title">Admin Login</h2>
+    <p class="login-sub">CSG Store Control Room</p>
+
+    <p class="login-joke">
+        Only admins beyond this point.<br>
+        Snacks are guarded carefully 😌
+    </p>
 
     <form th:action="@{/login}" method="post">
-        <input type="text" name="username" placeholder="Username" required>
-        <input type="password" name="password" placeholder="Password" required>
+
+        <input type="text"
+               name="username"
+               placeholder="👤 Username"
+               required>
+
+        <input type="password"
+               name="password"
+               placeholder="🔐 Password"
+               required>
 
         <div th:if="${param.error}" class="error">
-            Invalid username or password
+            ❌ Wrong credentials. Even admins forget sometimes.
         </div>
 
-        <button type="submit" class="btn">Login</button>
+        <button type="submit" class="btn">
+            Login →
+        </button>
     </form>
 
-    <a href="/">← Back to Store</a>
+    <div class="login-footer">
+        <a href="/">← Back to Store</a>
+    </div>
+
 </div>
 
 <script src="/js/theme.js"></script>

@@ -1,0 +1,193 @@
+/* ================================
+   ADMIN PAGE POLISH
+================================ */
+
+.admin-wrapper {
+  margin-top: 120px;
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 28px;
+  padding: 24px;
+}
+
+/* ---------- FORM CARD ---------- */
+
+.admin-form-card {
+  animation: slideIn 0.5s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.admin-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.admin-emoji {
+  font-size: 1.6rem;
+}
+
+.admin-hint {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 4px;
+}
+
+.admin-form .form-group {
+  margin-bottom: 14px;
+}
+
+.admin-form label {
+  font-size: 0.85rem;
+  opacity: 0.8;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.admin-form input,
+.admin-form select {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
+  color: var(--text-primary);
+}
+
+.admin-form input:focus,
+.admin-form select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.full-width {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* ---------- TABLE CARD ---------- */
+
+.admin-table-card {
+  animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.admin-table-header {
+  margin-bottom: 14px;
+}
+
+.admin-table th {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.admin-table td {
+  vertical-align: middle;
+}
+
+.admin-table .actions {
+  display: flex;
+  gap: 6px;
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+@media (max-width: 900px) {
+  .admin-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+/* ================================
+   CARD INNER SPACING (IMPORTANT)
+================================ */
+.admin-card-inner {
+  padding: 26px 28px;
+}
+
+/* ================================
+   HEADER ACTIONS
+================================ */
+.admin-header-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* ================================
+   TABLE ALIGNMENT FIX
+================================ */
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 14px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.admin-table th {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+.admin-table td:nth-child(3),
+.admin-table th:nth-child(3) {
+  text-align: left;
+  width: 120px;
+}
+
+.admin-table td:nth-child(4),
+.admin-table th:nth-child(4) {
+  text-align: left;
+  width: 160px;
+}
+
+.admin-table .actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* ================================
+   FORM BREATHING SPACE
+================================ */
+.admin-form .form-group {
+  margin-bottom: 18px;
+}
+
+.admin-form input,
+.admin-form select {
+  padding: 14px 16px;
+  border-radius: 14px;
+}
+
+/* ================================
+   CARD SEPARATION
+================================ */
+.admin-card {
+  margin-bottom: 10px;
+}
+/* ================================
+   STOP LEFT CARD FROM STRETCHING
+================================ */
+.admin-form-card {
+  align-self: start;   /* 🔑 THIS IS THE KEY */
+}
