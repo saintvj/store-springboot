@@ -11,19 +11,20 @@
 
 <!-- ================= HEADER ================= -->
 <header class="navbar glass fixed-header">
-    <div></div>
+    <!-- LEFT -->
+    <div class="left">
+        <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
 
+    <!-- CENTER -->
     <div class="center">
         <h1>CSG Store</h1>
     </div>
 
-    <div class="right">
-        <button id="themeToggle" class="theme-btn">🌙</button>
-        <div class="cart-fab" onclick="toggleCart()">
-            🛒 <span id="cartCount">0</span>
-        </div>
-    </div>
+    <!-- RIGHT -->
+    <div class="right"></div>
 </header>
+
 
 <!-- ================= CATEGORY SIDEBAR ================= -->
 <aside class="category-sidebar glass">
@@ -84,6 +85,10 @@
 <script src="/js/theme.js"></script>
 <script src="/js/home.js"></script>
 <script src="/js/cart.js"></script>
+
+<div class="cart-fab floating" onclick="toggleCart()">
+    🛒 <span id="cartCount">0</span>
+</div>
 
 </body>
 </html>

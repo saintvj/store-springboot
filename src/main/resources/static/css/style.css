@@ -1110,3 +1110,64 @@ body {
   background: #16a34a;
   cursor: default;
 }
+/* Floating cart button (global) */
+.cart-fab.floating {
+  position: fixed;
+  top: 18px;
+  right: 18px;
+  z-index: 2000;
+  cursor: pointer;
+}
+
+/* Ensure theme toggle stays visible */
+.theme-btn {
+  margin-right: 12px;
+  z-index: 2001;
+}
+
+/* ================================
+   FLOATING CART BUTTON (FIXED)
+================================ */
+
+.cart-fab.floating {
+  position: fixed;
+  right: 20px;
+  bottom: 24px;
+
+  width: 56px;
+  height: 56px;
+
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  font-size: 1.1rem;
+  cursor: pointer;
+
+  box-shadow: 0 10px 25px rgba(0,0,0,0.35);
+  z-index: 2000;
+
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cart-fab.floating:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 14px 30px rgba(0,0,0,0.45);
+}
+
+/* Cart count badge */
+.cart-fab.floating span {
+  font-size: 0.75rem;
+  background: white;
+  color: var(--accent);
+  padding: 2px 6px;
+  border-radius: 999px;
+  font-weight: 700;
+}
+
+
