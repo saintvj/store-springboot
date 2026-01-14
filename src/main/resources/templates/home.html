@@ -62,9 +62,7 @@
                  th:each="p : ${products}"
                  th:if="${p.category == c}">
 
-                <img th:src="'https://source.unsplash.com/400x300/?' + ${product.category.name().toLowerCase()}"
-                     alt="Snack image">
-
+                <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24">
 
                 <h3 th:text="${p.name}"></h3>
 
