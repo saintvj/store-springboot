@@ -42,3 +42,10 @@ function scrollFromData(el) {
     section.scrollIntoView({ behavior: "smooth" });
   }
 }
+function scrollFromData(el) {
+  const category = el.dataset.cat;
+  const section = document.getElementById(category);
+  if (section) {
+    section.scrollIntoView({ behavior: "smooth" });
+  }
+}

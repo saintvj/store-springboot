@@ -11,19 +11,29 @@
 
 <!-- ================= HEADER ================= -->
 <header class="navbar glass fixed-header">
-    <!-- LEFT -->
     <div class="left">
         <button id="themeToggle" class="theme-btn">🌙</button>
+        <button href="/login" class="btn secondary" >?admin</button>
     </div>
 
-    <!-- CENTER -->
     <div class="center">
         <h1>CSG Store</h1>
     </div>
 
-    <!-- RIGHT -->
     <div class="right"></div>
 </header>
+
+
+<!-- MOBILE CATEGORY STRIP -->
+<div class="mobile-categories">
+    <span th:each="c : ${T(com.vedant.store.model.Category).values()}"
+          th:text="${#strings.replace(c.name(),'_',' ')}"
+          th:data-cat="${c.name()}"
+          onclick="scrollFromData(this)">
+    </span>
+</div>
+
+
 
 
 <!-- ================= CATEGORY SIDEBAR ================= -->
@@ -32,9 +42,11 @@
     <ul>
         <li th:each="c : ${T(com.vedant.store.model.Category).values()}"
             th:text="${#strings.replace(c.name(),'_',' ')}"
-            th:attr="data-cat=${c.name()}"
+            th:data-cat="${c.name()}"
             onclick="scrollFromData(this)">
         </li>
+
+
     </ul>
 </aside>
 
@@ -79,6 +91,10 @@
         <button class="btn" onclick="placeOrderOnWhatsApp()">
             Order on WhatsApp
         </button>
+
+        <a href="/login" class="btn secondary" style="margin-top:10px;">
+            Admin Login
+        </a>
     </div>
 </div>
 
