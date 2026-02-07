@@ -1,5 +1,5 @@
 /* ===========================
-   CART BUTTON (TOP RIGHT)
+   CART BUTTON (HEADER)
 =========================== */
 
 .cart-btn {
@@ -12,7 +12,6 @@
   color: #fff;
   cursor: pointer;
   font-size: 0.9rem;
-  width: auto;              /* 🔑 prevents stretching */
   white-space: nowrap;
 }
 
@@ -24,7 +23,7 @@
 }
 
 .cart-btn.bump {
-  animation: bump 0.4s ease;
+  animation: bump 0.35s ease;
 }
 
 @keyframes bump {
@@ -40,29 +39,48 @@
 .cart-drawer {
   position: fixed;
   top: 0;
-  right: -360px;
+  right: 0;
+
   width: 360px;
   height: 100vh;
+
   background: var(--glass-bg);
   backdrop-filter: blur(18px);
   border-left: 1px solid var(--glass-border);
   box-shadow: -20px 0 40px rgba(0,0,0,0.15);
-  transition: right 0.3s ease;
-  z-index: 2000;
-  padding: 20px;
+
+  transform: translateX(100%);
+  transition: transform 0.3s ease;
+
+  z-index: 3000;
+
   display: flex;
   flex-direction: column;
 }
 
 .cart-drawer.open {
-  right: 0;
+  transform: translateX(0);
+}
+
+/* ===========================
+   CART CONTENT
+=========================== */
+
+.cart-header,
+.cart-footer {
+  padding: 16px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.cart-footer {
+  border-top: 1px solid var(--glass-border);
 }
 
 .cart-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 16px;
+  font-weight: 600;
 }
 
 .cart-header button {
@@ -74,12 +92,12 @@
 
 .cart-items {
   flex: 1;
+  padding: 16px;
   overflow-y: auto;
 }
 
 .cart-item {
-  margin-bottom: 16px;
-  padding-bottom: 12px;
+  padding: 12px 0;
   border-bottom: 1px solid var(--glass-border);
 }
 
@@ -87,31 +105,44 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 6px;
 }
 
-.cart-row button {
-  padding: 4px 8px;
-  border-radius: 6px;
+.qty-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.cart-footer {
-  margin-top: 16px;
+.qty-controls button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: white;
+  cursor: pointer;
+}
+
+.remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  color: #ef4444;
+}
+
+.cart-total {
+  margin-top: 12px;
+  text-align: right;
+  font-weight: 600;
 }
 
 /* ===========================
-   UPSELL SLIDE
+   MOBILE
 =========================== */
 
-.upsell-slide {
-  position: absolute;
-  top: 0;
-  right: -320px;
-  width: 300px;
-  padding: 20px;
-  transition: right 0.3s ease;
-}
-
-.product-layout.show-upsell .upsell-slide {
-  right: -20px;
+@media (max-width: 768px) {
+  .cart-drawer {
+    width: 100%;
+  }
 }

@@ -1,0 +1,42 @@
+@media (max-width: 768px) {
+
+  body.no-scroll {
+    overflow: hidden;
+  }
+
+  .fixed-header {
+    position: static;
+  }
+
+  .category-sidebar {
+    display: none;
+  }
+
+  .product-scroll {
+    margin-left: 0;
+    padding-top: 110px;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .product-card img {
+    height: 200px;
+  }
+
+  .mobile-categories {
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    white-space: nowrap;
+    position: sticky;
+    top: 80px;
+    z-index: 900;
+  }
+
+  .admin-btn {
+    display: none;
+  }
+}
