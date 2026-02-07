@@ -1,12 +1,9 @@
-/*************************
- * CART STATE
- *************************/
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
-const PRODUCT_QTY = 1000; // 1 unit = 1000 g
 
-/*************************
- * HELPERS
- *************************/
+// product page local state
+let localQty = 1;
+
+// ---------- HELPERS ----------
 function saveCart() {
   localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
@@ -16,145 +13,97 @@ function findItem(id) {
   return cart.find(i => i.id === id);
 }
 
-/*************************
- * PRODUCT PAGE LOGIC
- *************************/
-function syncProductControls() {
-  const card = document.getElementById("productCard");
-  if (!card) return;
-
-  const id = card.dataset.id;
-  const item = findItem(id);
-
-  const qtyText = document.getElementById("productQty");
-  const addBtn = document.getElementById("addToCartBtn");
-
-  const count = item ? item.qty / PRODUCT_QTY : 0;
-
-  qtyText.innerText = count;
-  addBtn.disabled = count === 0;
+// ---------- PRODUCT PAGE ----------
+function changeLocalQty(delta) {
+  localQty += delta;
+  if (localQty < 0) localQty = 0;
+  updateProductUI();
 }
 
-function addFromProduct() {
+function commitToCart() {
   const card = document.getElementById("productCard");
   const id = card.dataset.id;
   const name = card.dataset.name;
   const price = parseInt(card.dataset.price);
 
-  let item = findItem(id);
-
-  if (!item) {
-    cart.push({
-      id,
-      name,
-      price,
-      qty: PRODUCT_QTY
-    });
-  }
-
-  saveCart();
-  syncProductControls();
-}
-
-function increaseFromProduct() {
-  const card = document.getElementById("productCard");
-  const id = card.dataset.id;
-  const name = card.dataset.name;
-  const price = parseInt(card.dataset.price);
+  if (localQty === 0) return;
 
   let item = findItem(id);
 
-  // 🔥 FIX: if item does not exist, re-add it
   if (!item) {
-    cart.push({ id, name, price, qty: PRODUCT_QTY });
+    cart.push({ id, name, price, qty: localQty });
   } else {
-    item.qty += PRODUCT_QTY;
+    item.qty = localQty; // UPDATE quantity
   }
 
   saveCart();
-  syncProductControls();
+  updateProductUI();
 }
 
-function decreaseFromProduct() {
+function updateProductUI() {
+  const qtyEl = document.getElementById("localQty");
+  const btn = document.getElementById("addToCartBtn");
   const card = document.getElementById("productCard");
-  const id = card.dataset.id;
+  const item = findItem(card.dataset.id);
 
-  let item = findItem(id);
-  if (!item) return;
+  qtyEl.innerText = localQty;
 
-  item.qty -= PRODUCT_QTY;
-
-  if (item.qty <= 0) {
-    cart = cart.filter(i => i.id !== id);
+  if (localQty === 0) {
+    btn.disabled = true;
+  } else {
+    btn.disabled = false;
   }
 
-  saveCart();
-  syncProductControls();
+  if (item) {
+    btn.innerText = "Update Quantity";
+  } else {
+    btn.innerText = "Add to Cart";
+  }
 }
 
-/*************************
- * CART DRAWER
- *************************/
+// ---------- CART ----------
 function toggleCart() {
   document.getElementById("cartDrawer").classList.toggle("open");
 }
 
-/*************************
- * CART RENDER
- *************************/
 function renderCart() {
-  const itemsEl = document.getElementById("cartItems");
+  const el = document.getElementById("cartItems");
   const countEl = document.getElementById("cartCount");
 
-  if (!itemsEl || !countEl) return;
-
-  itemsEl.innerHTML = "";
-
+  el.innerHTML = "";
   let total = 0;
   let count = 0;
 
   cart.forEach(item => {
-    const units = item.qty / PRODUCT_QTY;
-    const price = item.price * units;
+    total += item.price * item.qty;
+    count += item.qty;
 
-    total += price;
-    count += units;
-
-    itemsEl.innerHTML += `
+    el.innerHTML += `
       <div class="cart-item">
         <strong>${item.name}</strong>
-
         <div class="cart-row">
           <div class="qty-controls">
-            <button onclick="updateQty('${item.id}', -1)">−</button>
-            <span>${item.qty} g</span>
-            <button onclick="updateQty('${item.id}', 1)">+</button>
+            <button onclick="updateCartQty('${item.id}', -1)">−</button>
+            <span>${item.qty} kg</span>
+            <button onclick="updateCartQty('${item.id}', 1)">+</button>
           </div>
-          <span>₹${price}</span>
+          <span>₹${item.price * item.qty}</span>
         </div>
       </div>
     `;
   });
 
-  itemsEl.innerHTML += `
+  el.innerHTML += `
     <div class="cart-total">Total: ₹${total}</div>
-    <button class="btn secondary full-width" onclick="clearCart()">
-      Clear Cart
-    </button>
+    <button class="btn secondary" onclick="clearCart()">Clear Cart</button>
   `;
 
   countEl.innerText = count;
-  syncProductControls();
 }
 
-/*************************
- * CART ACTIONS
- *************************/
-function updateQty(id, delta) {
+function updateCartQty(id, delta) {
   let item = findItem(id);
-  if (!item) return;
-
-  item.qty += delta * PRODUCT_QTY;
+  item.qty += delta;
 
   if (item.qty <= 0) {
     cart = cart.filter(i => i.id !== id);
@@ -168,8 +117,6 @@ function clearCart() {
   saveCart();
 }
 
-/*************************
- * INIT
- *************************/
+// ---------- INIT ----------
+updateProductUI();
 renderCart();
-syncProductControls();

@@ -4,7 +4,6 @@
     <title th:text="${product.name}">Product</title>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -12,15 +11,10 @@
 
 <header class="navbar glass fixed-header">
     <div></div>
-
-    <div class="center">
-        <h1>CSG Store</h1>
-    </div>
-
+    <div class="center"><h1>CSG Store</h1></div>
     <div class="right">
         <button id="themeToggle" class="theme-btn">🌙</button>
         <a href="/login" class="btn admin-btn">Admin</a>
-
         <div class="cart-fab" onclick="toggleCart()">
             🛒 <span id="cartCount">0</span>
         </div>
@@ -37,33 +31,21 @@
         <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24">
 
         <h2 th:text="${product.name}"></h2>
-
         <p class="price">₹ <span th:text="${product.price}"></span> / kg</p>
 
-        <!-- ROW 1 -->
-        <div class="qty-row">
-            <select class="qty" id="qty">
-                <option value="500">500 g</option>
-                <option value="1000" selected>1 kg</option>
-                <option value="1500">1.5 kg</option>
-                <option value="2000">2 kg</option>
-            </select>
-
-            <div class="qty-inline">
-                <button class="qty-btn" onclick="decreaseFromProduct()">−</button>
-                <span id="productQty">1</span>
-                <button class="qty-btn" onclick="increaseFromProduct()">+</button>
-            </div>
+        <!-- LOCAL QUANTITY (NOT CART) -->
+        <div class="qty-inline">
+            <button class="qty-btn" onclick="changeLocalQty(-1)">−</button>
+            <span id="localQty">1</span>
+            <button class="qty-btn" onclick="changeLocalQty(1)">+</button>
         </div>
 
-        <!-- ROW 2 -->
         <button id="addToCartBtn"
                 class="btn full-width"
-                onclick="addFromProduct()">
+                onclick="commitToCart()">
             Add to Cart
         </button>
 
-        <!-- ROW 3 -->
         <a href="/" class="btn secondary full-width">
             Add more items
         </a>

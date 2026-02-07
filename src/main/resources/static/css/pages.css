@@ -1,35 +1,7 @@
 /* ================================
-   HOME PAGE
+   PRODUCT PAGE – CLEAN & FINAL
 ================================ */
-.home-page .category-sidebar,
-.home-page .product-scroll {
-  animation: home-enter 0.45s ease-out both;
-}
 
-@keyframes home-enter {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ================================
-   LOGIN PAGE
-================================ */
-.login-page {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-}
-
-.login-page .glass {
-  width: 360px;
-  padding: 28px;
-  text-align: center;
-}
-
-/* ================================
-   PRODUCT PAGE
-================================ */
 .product-page .detail-wrapper {
   display: flex;
   justify-content: center;
@@ -39,15 +11,8 @@
 .product-page .detail-card {
   width: 420px;
   padding: 24px;
+  text-align: center;
 }
-
-.product-page .qty {
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--glass-border);
-  background: var(--glass-bg);
-}
-
 
 .product-page .detail-card img {
   width: 100%;
@@ -57,23 +22,27 @@
   margin-bottom: 16px;
 }
 
-.product-actions {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 12px;
-  margin-top: 16px;
-  align-items: center;
+/* PRICE */
+.product-page .price {
+  margin-bottom: 16px;
 }
 
-/* force Add more items to next row */
-.product-actions a {
-  grid-column: span 2;
+/* DROPDOWN */
+.product-page .qty {
+  margin: 0 auto 14px auto;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--glass-border);
+  background: var(--glass-bg);
 }
 
+/* +/- CONTROLS */
 .qty-inline {
   display: flex;
+  justify-content: center;
   align-items: center;
-  gap: 12px;
+  gap: 14px;
+  margin-bottom: 18px;
 }
 
 .qty-btn {
@@ -85,4 +54,20 @@
   color: white;
   font-size: 1.2rem;
   cursor: pointer;
+}
+
+#productQty {
+  min-width: 24px;
+  font-weight: 600;
+}
+
+/* BUTTONS */
+.full-width {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+#addToCartBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
