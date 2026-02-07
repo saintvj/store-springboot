@@ -65,7 +65,7 @@
                  th:each="p : ${products}"
                  th:if="${p.category == c}">
 
-                <img src="https://images.unsplash.com/photo-1604909052743-94e838986d24">
+                <img th:src="'https://picsum.photos/seed/' + ${p.id} + '/400/300'">
 
                 <h3 th:text="${p.name}"></h3>
 
