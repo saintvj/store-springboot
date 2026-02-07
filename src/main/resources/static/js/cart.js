@@ -1,204 +1,175 @@
-const CART_KEY = "csg_cart";
-const PHONE = "918446861047";
+/*************************
+ * CART STATE
+ *************************/
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const PRODUCT_QTY = 1000; // 1 unit = 1000 g
 
-/* ================= CART CORE ================= */
-
-function getCart() {
-  return JSON.parse(localStorage.getItem(CART_KEY)) || [];
-}
-
-function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
-  updateCartCount();
-}
-
-function updateCartCount() {
-  const badge = document.getElementById("cartCount");
-  if (badge) badge.textContent = getCart().length;
-}
-
-/* ================= ADD TO CART ================= */
-
-function addToCart(product) {
-  const cart = getCart();
-  const existing = cart.find(i => i.id === product.id);
-
-  if (existing) return; // do NOT re-add
-
-  cart.push(product);
-  saveCart(cart);
-  flashCart();
-  showToast("Added to cart 🛒");
-}
-
-/* ================= CART UI ================= */
-
-function toggleCart() {
-  document.getElementById("cartDrawer").classList.toggle("open");
+/*************************
+ * HELPERS
+ *************************/
+function saveCart() {
+  localStorage.setItem("cart", JSON.stringify(cart));
   renderCart();
 }
 
-function renderCart() {
-  const cart = getCart();
-  const container = document.getElementById("cartItems");
-  if (!container) return;
+function findItem(id) {
+  return cart.find(i => i.id === id);
+}
 
-  if (cart.length === 0) {
-    container.innerHTML = "<p>Your cart is empty 🛒</p>";
-    return;
+/*************************
+ * PRODUCT PAGE LOGIC
+ *************************/
+function syncProductControls() {
+  const card = document.getElementById("productCard");
+  if (!card) return;
+
+  const id = card.dataset.id;
+  const item = findItem(id);
+
+  const qtyText = document.getElementById("productQty");
+  const addBtn = document.getElementById("addToCartBtn");
+
+  const count = item ? item.qty / PRODUCT_QTY : 0;
+
+  qtyText.innerText = count;
+  addBtn.disabled = count === 0;
+}
+
+function addFromProduct() {
+  const card = document.getElementById("productCard");
+  const id = card.dataset.id;
+  const name = card.dataset.name;
+  const price = parseInt(card.dataset.price);
+
+  let item = findItem(id);
+
+  if (!item) {
+    cart.push({
+      id,
+      name,
+      price,
+      qty: PRODUCT_QTY
+    });
   }
 
+  saveCart();
+  syncProductControls();
+}
+
+function increaseFromProduct() {
+  const card = document.getElementById("productCard");
+  const id = card.dataset.id;
+  const name = card.dataset.name;
+  const price = parseInt(card.dataset.price);
+
+  let item = findItem(id);
+
+  // 🔥 FIX: if item does not exist, re-add it
+  if (!item) {
+    cart.push({ id, name, price, qty: PRODUCT_QTY });
+  } else {
+    item.qty += PRODUCT_QTY;
+  }
+
+  saveCart();
+  syncProductControls();
+}
+
+function decreaseFromProduct() {
+  const card = document.getElementById("productCard");
+  const id = card.dataset.id;
+
+  let item = findItem(id);
+  if (!item) return;
+
+  item.qty -= PRODUCT_QTY;
+
+  if (item.qty <= 0) {
+    cart = cart.filter(i => i.id !== id);
+  }
+
+  saveCart();
+  syncProductControls();
+}
+
+/*************************
+ * CART DRAWER
+ *************************/
+function toggleCart() {
+  document.getElementById("cartDrawer").classList.toggle("open");
+}
+
+/*************************
+ * CART RENDER
+ *************************/
+function renderCart() {
+  const itemsEl = document.getElementById("cartItems");
+  const countEl = document.getElementById("cartCount");
+
+  if (!itemsEl || !countEl) return;
+
+  itemsEl.innerHTML = "";
+
   let total = 0;
-  container.innerHTML = "";
+  let count = 0;
 
   cart.forEach(item => {
-    const price = Math.round(
-      (item.pricePerKg * item.quantityInGrams) / 1000
-    );
-    total += price;
+    const units = item.qty / PRODUCT_QTY;
+    const price = item.price * units;
 
-    container.innerHTML += `
+    total += price;
+    count += units;
+
+    itemsEl.innerHTML += `
       <div class="cart-item">
-        <div class="cart-row">
-          <strong>${item.name}</strong>
-          <button class="remove-btn" onclick="removeFromCart(${item.id})">✕</button>
-        </div>
+        <strong>${item.name}</strong>
 
         <div class="cart-row">
           <div class="qty-controls">
-            <button onclick="changeQty(${item.id}, 'dec')">−</button>
-            <span>${item.quantityInGrams} g</span>
-            <button onclick="changeQty(${item.id}, 'inc')">+</button>
+            <button onclick="updateQty('${item.id}', -1)">−</button>
+            <span>${item.qty} g</span>
+            <button onclick="updateQty('${item.id}', 1)">+</button>
           </div>
-          <div class="price">₹${price}</div>
+          <span>₹${price}</span>
         </div>
       </div>
     `;
   });
 
-  container.innerHTML += `
-    <div class="cart-total">
-      <strong>Total: ₹${total}</strong>
-    </div>
+  itemsEl.innerHTML += `
+    <div class="cart-total">Total: ₹${total}</div>
+    <button class="btn secondary full-width" onclick="clearCart()">
+      Clear Cart
+    </button>
   `;
+
+  countEl.innerText = count;
+  syncProductControls();
 }
 
-/* ================= QUANTITY LOGIC ================= */
-
-function changeQty(id, type) {
-  const cart = getCart();
-  const item = cart.find(p => p.id === id);
+/*************************
+ * CART ACTIONS
+ *************************/
+function updateQty(id, delta) {
+  let item = findItem(id);
   if (!item) return;
 
-  if (type === "inc") {
-    item.quantityInGrams *= 2;
+  item.qty += delta * PRODUCT_QTY;
+
+  if (item.qty <= 0) {
+    cart = cart.filter(i => i.id !== id);
   }
 
-  if (type === "dec") {
-    if (item.quantityInGrams === item.baseQuantityGrams) {
-      removeFromCart(id);
-      return;
-    }
-    item.quantityInGrams /= 2;
-  }
-
-  saveCart(cart);
-  renderCart();
+  saveCart();
 }
 
-function removeFromCart(id) {
-  const cart = getCart().filter(p => p.id !== id);
-  saveCart(cart);
-  renderCart();
+function clearCart() {
+  cart = [];
+  saveCart();
 }
 
-/* ================= WHATSAPP ================= */
-
-function placeOrderOnWhatsApp() {
-  const cart = getCart();
-  if (cart.length === 0) {
-    alert("Your cart is empty 🛒");
-    return;
-  }
-
-  let msg = "Hi, I want to order:\n\n";
-  let total = 0;
-
-  cart.forEach(item => {
-    const price = Math.round(
-      (item.pricePerKg * item.quantityInGrams) / 1000
-    );
-    total += price;
-    msg += `- ${item.name} (${item.quantityInGrams}g) – ₹${price}\n`;
-  });
-
-  msg += `\nTotal: ₹${total}`;
-
-  window.open(
-    `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`,
-    "_blank"
-  );
-}
-
-/* ================= PRODUCT PAGE HOOK ================= */
-
-document.addEventListener("DOMContentLoaded", () => {
-  updateCartCount();
-
-  const addBtn = document.getElementById("addToCartBtn");
-  const removeBtn = document.getElementById("removeFromCartBtn");
-  const card = document.getElementById("productCard");
-  if (!addBtn || !card) return;
-
-  const productId = parseInt(card.dataset.id, 10);
-  const cart = getCart();
-
-  if (cart.some(p => p.id === productId)) {
-    addBtn.textContent = "Added ✓";
-    addBtn.classList.add("added");
-    addBtn.disabled = true;
-    if (removeBtn) removeBtn.style.display = "inline-block";
-  }
-
-  addBtn.addEventListener("click", () => {
-    const qty = parseInt(document.getElementById("qty").value, 10);
-
-    addToCart({
-      id: productId,
-      name: card.dataset.name,
-      pricePerKg: parseInt(card.dataset.price),
-      quantityInGrams: qty,
-      baseQuantityGrams: qty,
-      category: card.dataset.category
-    });
-
-    addBtn.textContent = "Added ✓";
-    addBtn.classList.add("added");
-    addBtn.disabled = true;
-    if (removeBtn) removeBtn.style.display = "inline-block";
-  });
-
-  if (removeBtn) {
-    removeBtn.addEventListener("click", () => {
-      removeFromCart(productId);
-      location.reload();
-    });
-  }
-});
-
-/* ================= VISUAL HELPERS ================= */
-
-function flashCart() {
-  const fab = document.querySelector(".cart-fab");
-  if (!fab) return;
-  fab.classList.add("flash");
-  setTimeout(() => fab.classList.remove("flash"), 800);
-}
-
-function showToast(text) {
-  const toast = document.getElementById("toast");
-  if (!toast) return;
-  toast.textContent = text;
-  toast.classList.add("show");
-  setTimeout(() => toast.classList.remove("show"), 1800);
-}
+/*************************
+ * INIT
+ *************************/
+renderCart();
+syncProductControls();

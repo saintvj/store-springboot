@@ -56,3 +56,33 @@
   border-radius: 16px;
   margin-bottom: 16px;
 }
+
+.product-actions {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: center;
+}
+
+/* force Add more items to next row */
+.product-actions a {
+  grid-column: span 2;
+}
+
+.qty-inline {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.qty-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: var(--accent);
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
